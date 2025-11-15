@@ -101,40 +101,63 @@
             opacity: 0;
             animation: fadeIn 1s ease-out 1.5s forwards;
         }
+        
+        /* Ensure html and body take full height for mobile app feel */
+        html, body {
+            min-height: 100%;
+        }
+        
+        /* Hide scrollbar for tab navigation */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
 
     </style>
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 py-8">
+<!-- 
+  Responsive Body:
+  - Default (Mobile): bg-white, takes full screen
+  - sm (Desktop): bg-gray-100, centers content, adds padding
+-->
+<body class="bg-white sm:bg-gray-100 sm:flex sm:items-center sm:justify-center sm:min-h-screen sm:p-4 sm:py-8">
 
-    <!-- Main Verification Card -->
-    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
+    <!-- 
+      Main Verification Card:
+      - Default (Mobile): Full width, full height, no rounded corners or shadow
+      - sm (Desktop): Max-width, rounded corners, shadow
+    -->
+    <div class="w-full bg-white animate-fade-in sm:max-w-2xl sm:rounded-2xl sm:shadow-2xl sm:overflow-hidden">
         
         <!-- Header with Emblems -->
-        <header class="p-6 bg-gradient-to-r from-green-800 to-green-600 text-white">
+        <header class="p-4 sm:p-6 bg-gradient-to-r from-green-800 to-green-600 text-white">
             <div class="flex justify-between items-center">
                 <!-- Nigerian Coat of Arms -->
                 <img src="https://ntda.gov.ng/img/assets_coat_of_arms.png" 
                      alt="Nigerian Coat of Arms" 
-                     class="h-16 w-16"
+                     class="h-12 w-12 sm:h-16 sm:w-16 flex-shrink-0"
                      onerror="this.src='https://placehold.co/100x100/ffffff/333333?text=NGA'">
                 
-                <div class="text-center">
-                    <h1 class="text-xl font-bold">PLATEAU STATE GOVERNMENT</h1>
-                    <p class="text-sm opacity-90">Ministry of Lands, Survey & Town Planning</p>
-                    <p class="text-lg font-semibold mt-1">Certificate of Occupancy Verification</p>
+                <div class="text-center px-2">
+                    <h1 class="text-lg sm:text-xl font-bold">PLATEAU STATE GOVERNMENT</h1>
+                    <p class="text-xs sm:text-sm opacity-90">Ministry of Lands, Survey & Town Planning</p>
+                    <p class="text-base sm:text-lg font-semibold mt-1">C of O Verification</p>
                 </div>
                 
                 <!-- Plateau State Emblem -->
                 <img src="https://nigeriastar.news.blog/wp-content/uploads/2021/05/images281329.jpeg?w=640" 
                      alt="Plateau State Emblem" 
-                     class="h-16 w-16"
+                     class="h-12 w-12 sm:h-16 sm:w-16 flex-shrink-0"
                      onerror="this.src='https://placehold.co/100x100/ffffff/333333?text=PLS'">
             </div>
         </header>
 
         <!-- Dynamic Status Container -->
-        <div class="p-6 text-center" id="status-container">
+        <div class="p-4 sm:p-6 text-center" id="status-container">
             <!-- This content will be dynamically replaced by JavaScript -->
             <div class="flex flex-col items-center justify-center min-h-[400px]">
                 <div classs="h-16 w-16 text-green-600">
@@ -159,7 +182,7 @@
 
     <!-- Payment Modal (Hidden by default) -->
     <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 hidden transition-opacity duration-300">
-        <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md text-center transform transition-all scale-95 opacity-0" id="payment-modal-content">
+        <div class="bg-white rounded-lg shadow-xl p-6 sm:p-8 w-full max-w-md text-center transform transition-all scale-95 opacity-0" id="payment-modal-content">
             <h2 class="text-2xl font-bold text-gray-900">Payment Required</h2>
             <p class="text-gray-600 mt-2">A non-refundable fee is required to verify this certificate.</p>
             
@@ -218,12 +241,12 @@
             </svg>`;
 
         const successIcon = `
-            <svg class="animate-scale-check w-24 h-24 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+            <svg class="animate-scale-check w-20 h-20 sm:w-24 sm:h-24 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>`;
         
         const failureIcon = `
-            <svg class="animate-scale-check w-24 h-24 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+            <svg class="animate-scale-check w-20 h-20 sm:w-24 sm:h-24 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>`;
 
@@ -260,20 +283,20 @@
             statusContainer.innerHTML = `
                 <div class="flex flex-col items-center justify-center w-full text-left">
                     <div class="my-4">${successIcon}</div>
-                    <h2 class="text-3xl font-extrabold text-green-600 text-center">VERIFIED & AUTHENTIC</h2>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-green-600 text-center">VERIFIED & AUTHENTIC</h2>
                     <p class="text-center text-gray-600 mb-6">This Certificate of Occupancy (Ref: ${ref}) is valid.</p>
 
                     <!-- Tab Navigation -->
-                    <nav class="w-full flex border-b border-gray-200 overflow-x-auto">
-                        <button class="tab-button active py-3 px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="summary">Land Summary</button>
-                        <button class="tab-button py-3 px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="owner">Owner Summary</button>
-                        <button class="tab-button py-3 px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="tdp">TDP/Survey</button>
-                        <button class="tab-button py-3 px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="location">Location (GIS)</button>
-                        <button class="tab-button py-3 px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="terms">Terms</button>
+                    <nav class="w-full flex border-b border-gray-200 overflow-x-auto no-scrollbar">
+                        <button class="tab-button active py-3 px-3 sm:px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="summary">Land Summary</button>
+                        <button class="tab-button py-3 px-3 sm:px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="owner">Owner Summary</button>
+                        <button class="tab-button py-3 px-3 sm:px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="tdp">TDP/Survey</button>
+                        <button class="tab-button py-3 px-3 sm:px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="location">Location (GIS)</button>
+                        <button class="tab-button py-3 px-3 sm:px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="terms">Terms</button>
                     </nav>
 
                     <!-- Tab Content Panels -->
-                    <div class="w-full pt-6">
+                    <div class="w-full pt-4 sm:pt-6">
                         
                         <!-- Land Summary Panel -->
                         <div id="tab-content-summary" class="tab-panel w-full bg-white rounded-lg divide-y divide-gray-200">
@@ -321,9 +344,9 @@
 
                         <!-- Owner Summary Panel -->
                         <div id="tab-content-owner" class="tab-panel hidden w-full bg-white rounded-lg p-1">
-                             <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
+                             <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
                                 <div class="flex-shrink-0">
-                                    <img class="h-32 w-32 rounded-lg object-cover border-2 border-gray-100 shadow-sm" 
+                                    <img class="h-24 w-24 sm:h-32 sm:w-32 rounded-lg object-cover border-2 border-gray-100 shadow-sm" 
                                          src="https://placehold.co/200x200/e8f8f2/047857?text=Owner+Photo" 
                                          alt="Owner Photo"
                                          onerror="this.src='https://placehold.co/128x128/e2e8f0/64748b?text=Photo+N/A'">
@@ -385,7 +408,7 @@
                         <!-- Location (GIS) Panel -->
                         <div id="tab-content-location" class="tab-panel hidden w-full bg-white rounded-lg">
                             <p class="text-sm text-gray-600 mb-2">Live GIS Location View</p>
-                            <div class="w-full h-96 rounded-lg overflow-hidden border border-gray-200">
+                            <div class="w-full h-80 sm:h-96 rounded-lg overflow-hidden border border-gray-200">
                                 <iframe
                                     width="100%"
                                     height="100%"
@@ -398,8 +421,8 @@
                             </div>
                             <div class="mt-4 bg-gray-50 p-4 rounded-lg">
                                 <h4 class="font-semibold text-gray-800">Plot Coordinates</h4>
-                                <p class="text-gray-600">Latitude: <span class="font-medium text-gray-900">9.8521° N</span></p>
-                                <p class="text-gray-600">Longitude: <span class="font-medium text-gray-900">8.9015° E</span></p>
+                                <p class="text-gray-600 text-sm sm:text-base">Latitude: <span class="font-medium text-gray-900">9.8521° N</span></p>
+                                <p class="text-gray-600 text-sm sm:text-base">Longitude: <span class="font-medium text-gray-900">8.9015° E</span></p>
                             </div>
                         </div>
 
@@ -490,13 +513,13 @@
             statusContainer.innerHTML = `
                 <div class="flex flex-col items-center justify-center min-h-[400px] text-center">
                     <div class="my-4">${failureIcon}</div>
-                    <h2 class="text-3xl font-extrabold text-red-600">VERIFICATION FAILED</h2>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-red-600">VERIFICATION FAILED</h2>
                     <p class="text-lg text-gray-700 mt-4">
                         The Certificate of Occupancy with reference <strong class="text-red-700">${ref}</strong> was not found in the official PLAGIS database.
                     </p>
                     <p class="text-gray-600 mt-6">
                         This certificate may be invalid or fraudulent. Please visit the Ministry of Lands, Survey and Town Planning head office at Joseph Gomwalk Secretariat for immediate assistance.
-                    </pre>
+                    </p>
                 </div>
             `;
         };
@@ -543,7 +566,7 @@
                 payButton.onclick = async () => {
                     // Hide modal
                     paymentModal.classList.remove('opacity-100');
-                    paymentModalContent.classList.remove('scale-100', 'opacity-100');
+                    paymentModalContent.classList.remove('scale-1s0', 'opacity-100');
                     await delay(300);
                     paymentModal.classList.add('hidden');
 
