@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official C of O Verification - Plateau State</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS for Animations and Styling -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- Custom Animations --- */
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin 1.5s linear infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes scaleCheck {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .animate-scale-check {
+            transform-origin: center;
+            animation: scaleCheck 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .stagger-child {
+            opacity: 0;
+            animation: slideInUp 0.5s ease-out forwards;
+        }
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tab active state */
+        .tab-button.active {
+            border-color: #047857; /* green-700 */
+            color: #047857; /* green-700 */
+            font-weight: 600;
+        }
+
+        /* SVG Survey Animations */
+        @keyframes draw-line {
+            from { stroke-dashoffset: 1000; }
+            to { stroke-dashoffset: 0; }
+        }
+        .svg-plot-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw-line 2s ease-out forwards;
+        }
+
+        @keyframes pulse-beacon {
+            0% { r: 4; opacity: 1; }
+            50% { r: 8; opacity: 0.5; }
+            100% { r: 4; opacity: 1; }
+        }
+        .svg-beacon {
+            fill: #dc2626; /* red-600 */
+            cursor: pointer;
+            animation: pulse-beacon 1.5s infinite;
+        }
+        .svg-beacon:hover {
+            animation: none;
+            fill: #ef4444; /* red-500 */
+        }
+        
+        .svg-text {
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.5s forwards;
+        }
+
+    </style>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 py-8">
+
+    <!-- Main Verification Card -->
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
+        
+        <!-- Header with Emblems -->
+        <header class="p-6 bg-gradient-to-r from-green-800 to-green-600 text-white">
+            <div class="flex justify-between items-center">
+                <!-- Nigerian Coat of Arms -->
+                <img src="https://ntda.gov.ng/img/assets_coat_of_arms.png" 
+                     alt="Nigerian Coat of Arms" 
+                     class="h-16 w-16"
+                     onerror="this.src='https://placehold.co/100x100/ffffff/333333?text=NGA'">
+                
+                <div class="text-center">
+                    <h1 class="text-xl font-bold">PLATEAU STATE GOVERNMENT</h1>
+                    <p class="text-sm opacity-90">Ministry of Lands, Survey & Town Planning</p>
+                    <p class="text-lg font-semibold mt-1">Certificate of Occupancy Verification</p>
+                </div>
+                
+                <!-- Plateau State Emblem -->
+                <img src="https://nigeriastar.news.blog/wp-content/uploads/2021/05/images281329.jpeg?w=640" 
+                     alt="Plateau State Emblem" 
+                     class="h-16 w-16"
+                     onerror="this.src='https://placehold.co/100x100/ffffff/333333?text=PLS'">
+            </div>
+        </header>
+
+        <!-- Dynamic Status Container -->
+        <div class="p-6 text-center" id="status-container">
+            <!-- This content will be dynamically replaced by JavaScript -->
+            <div class="flex flex-col items-center justify-center min-h-[400px]">
+                <div classs="h-16 w-16 text-green-600">
+                    <svg class="animate-spin-slow w-16 h-16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                </div>
+                <p class="text-lg font-medium text-gray-700 mt-4">Initializing...</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="p-4 bg-gray-50 border-t border-gray-100 text-center">
+            <p class="text-xs text-gray-500">
+                Powered by <span class="font-bold">Plateau Geographic Information Service (PLAGIS)</span>
+            </p>
+            <p class="text-xs text-gray-500 mt-1">
+                &copy; <span id="current-year"></span> Plateau State Government. All Rights Reserved.
+            </p>
+        </footer>
+    </div>
+
+    <!-- Payment Modal (Hidden by default) -->
+    <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 hidden transition-opacity duration-300">
+        <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md text-center transform transition-all scale-95 opacity-0" id="payment-modal-content">
+            <h2 class="text-2xl font-bold text-gray-900">Payment Required</h2>
+            <p class="text-gray-600 mt-2">A non-refundable fee is required to verify this certificate.</p>
+            
+            <div class="my-6">
+                <p class="text-sm text-gray-500">VERIFICATION FEE</p>
+                <p class="text-5xl font-extrabold text-green-700">₦5,000<span class="text-3xl font-bold">.00</span></p>
+                <p class="text-sm text-gray-500 mt-1">Payable to: PLS Ministry of Lands & Survey</p>
+            </div>
+            
+            <button id="pay-button" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                Proceed to Pay ₦5,000
+            </button>
+            <p class="text-xs text-gray-400 mt-4">This is a simulated secure payment gateway.</p>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Get dynamic elements
+        const statusContainer = document.getElementById('status-container');
+        const paymentModal = document.getElementById('payment-modal');
+        const paymentModalContent = document.getElementById('payment-modal-content');
+        const payButton = document.getElementById('pay-button');
+        
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Helper function for delays
+        const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
+        // Helper function to update the status container
+        const updateStatus = (icon, title, message) => {
+            statusContainer.innerHTML = `
+                <div class="flex flex-col items-center justify-center min-h-[400px]">
+                    <div class="h-20 w-20 text-green-600">${icon}</div>
+                    <h3 class="text-xl font-bold text-gray-800 mt-4">${title}</h3>
+                    <p class="text-base text-gray-500 mt-1">${message}</p>
+                </div>
+            `;
+        };
+
+        // --- Icon Templates ---
+        const spinnerIcon = `
+            <svg class="animate-spin-slow w-20 h-20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>`;
+        
+        const databaseIcon = `
+            <svg class="animate-pulse-dot w-20 h-20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375" />
+            </svg>`;
+
+        const paymentIcon = `
+            <svg class="w-20 h-20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h6m-6 2.25h6M12 9.75l.75.75m.75-.75l-.75.75m0 0l-.75-.75m.75.75l.75-.75m-4.5 3.75l.75.75m.75-.75l-.75.75m0 0l-.75-.75m.75.75l.75-.75m6-3l.75.75m.75-.75l-.75.75m0 0l-.75-.75m.75.75l.75-.75M12 19.875l.75.75m.75-.75l-.75.75m0 0l-.75-.75m.75.75l.75-.75m-4.5-3.75l.75.75m.75-.75l-.75.75m0 0l-.75-.75m.75.75l.75-.75m6-3l.75.75m.75-.75l-.75.75m0 0l-.75-.75m.75.75l.75-.75" />
+            </svg>`;
+
+        const successIcon = `
+            <svg class="animate-scale-check w-24 h-24 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>`;
+        
+        const failureIcon = `
+            <svg class="animate-scale-check w-24 h-24 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>`;
+
+        // --- Main App Logic ---
+
+        // Function to set up tab interactivity
+        const initializeTabs = () => {
+            const tabs = document.querySelectorAll('.tab-button');
+            const panels = document.querySelectorAll('.tab-panel');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetTab = tab.getAttribute('data-tab');
+
+                    // Update tab buttons
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    // Update tab panels
+                    panels.forEach(panel => {
+                        if (panel.id === `tab-content-${targetTab}`) {
+                            panel.classList.remove('hidden');
+                        } else {
+                            panel.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+        };
+
+        // Function to display the final success screen with tabs
+        const showSuccessScreen = (ref) => {
+            const verificationDate = new Date();
+            statusContainer.innerHTML = `
+                <div class="flex flex-col items-center justify-center w-full text-left">
+                    <div class="my-4">${successIcon}</div>
+                    <h2 class="text-3xl font-extrabold text-green-600 text-center">VERIFIED & AUTHENTIC</h2>
+                    <p class="text-center text-gray-600 mb-6">This Certificate of Occupancy (Ref: ${ref}) is valid.</p>
+
+                    <!-- Tab Navigation -->
+                    <nav class="w-full flex border-b border-gray-200 overflow-x-auto">
+                        <button class="tab-button active py-3 px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="summary">Land Summary</button>
+                        <button class="tab-button py-3 px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="owner">Owner Summary</button>
+                        <button class="tab-button py-3 px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="tdp">TDP/Survey</button>
+                        <button class="tab-button py-3 px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="location">Location (GIS)</button>
+                        <button class="tab-button py-3 px-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-green-600 hover:border-green-600 flex-shrink-0" data-tab="terms">Terms</button>
+                    </nav>
+
+                    <!-- Tab Content Panels -->
+                    <div class="w-full pt-6">
+                        
+                        <!-- Land Summary Panel -->
+                        <div id="tab-content-summary" class="tab-panel w-full bg-white rounded-lg divide-y divide-gray-200">
+                            <div class="py-3 grid grid-cols-3 gap-4 stagger-child">
+                                <span class="text-sm font-medium text-gray-500">C of O Number</span>
+                                <span class="text-sm font-semibold text-gray-900 col-span-2">${ref}</span>
+                            </div>
+                            <div class="py-3 grid grid-cols-3 gap-4 stagger-child" style="animation-delay: 100ms;">
+                                <span class="text-sm font-medium text-gray-500">File Number</span>
+                                <span class="text-sm font-semibold text-gray-900 col-span-2">PLAGIS/JOS-N/2021/8842</span>
+                            </div>
+                            <div class="py-3 grid grid-cols-3 gap-4 stagger-child" style="animation-delay: 200ms;">
+                                <span class="text-sm font-medium text-gray-500">Plot Size</span>
+                                <span class="text-sm font-semibold text-gray-900 col-span-2">1,250.75 sqm</span>
+                            </div>
+                            <div class="py-3 grid grid-cols-3 gap-4 stagger-child" style="animation-delay: 300ms;">
+                                <span class="text-sm font-medium text-gray-500">Location</span>
+                                <span class="text-sm font-semibold text-gray-900 col-span-2">Plot 72, Phase 2, Rayfield Residential Layout, Jos South L.G.A</span>
+                            </div>
+                            <div class="py-3 grid grid-cols-3 gap-4 stagger-child" style="animation-delay: 400ms;">
+                                <span class="text-sm font-medium text-gray-500">Cadastral Zone</span>
+                                <span class="text-sm font-semibold text-gray-900 col-span-2">JS-301B</span>
+                            </div>
+                            <div class="py-3 grid grid-cols-3 gap-4 stagger-child" style="animation-delay: 500ms;">
+                                <span class="text-sm font-medium text-gray-500">Land Use</span>
+                                <span class="text-sm font-semibold text-gray-900 col-span-2">Residential (Private Dwelling)</span>
+                            </div>
+                            <div class="py-3 grid grid-cols-3 gap-4 stagger-child" style="animation-delay: 600ms;">
+                                <span class="text-sm font-medium text-gray-500">Term (Lease)</span>
+                                <span class="text-sm font-semibold text-gray-900 col-span-2">99 Years from 01/03/2021</span>
+                            </div>
+                            <div class="py-3 grid grid-cols-3 gap-4 stagger-child" style="animation-delay: 700ms;">
+                                <span class="text-sm font-medium text-gray-500">Ground Rent</span>
+                                <span class="text-sm font-semibold text-green-700 col-span-2">PAID (Valid until 31/12/${verificationDate.getFullYear()})</span>
+                            </div>
+                            <div class="py-3 grid grid-cols-3 gap-4 stagger-child" style="animation-delay: 800ms;">
+                                <span class="text-sm font-medium text-gray-500">Verification Fee</span>
+                                <span class="text-sm font-semibold text-gray-900 col-span-2">₦5,000.00 (PAID)</span>
+                            </div>
+                            <div class="py-3 grid grid-cols-3 gap-4 stagger-child" style="animation-delay: 900ms;">
+                                <span class="text-sm font-medium text-gray-500">Verified On</span>
+                                <span class="text-sm font-semibold text-gray-900 col-span-2">${verificationDate.toLocaleString()}</span>
+                            </div>
+                        </div>
+
+                        <!-- Owner Summary Panel -->
+                        <div id="tab-content-owner" class="tab-panel hidden w-full bg-white rounded-lg p-1">
+                             <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
+                                <div class="flex-shrink-0">
+                                    <img class="h-32 w-32 rounded-lg object-cover border-2 border-gray-100 shadow-sm" 
+                                         src="https://placehold.co/200x200/e8f8f2/047857?text=Owner+Photo" 
+                                         alt="Owner Photo"
+                                         onerror="this.src='https://placehold.co/128x128/e2e8f0/64748b?text=Photo+N/A'">
+                                </div>
+                                <div class="flex-grow w-full">
+                                    <div class="divide-y divide-gray-200">
+                                        <div class="py-3 grid grid-cols-3 gap-4">
+                                            <span class="text-sm font-medium text-gray-500">Holder Name(s)</span>
+                                            <span class="text-sm font-semibold text-gray-900 col-span-2">Mr. Adebayo J. David & Mrs. Funke A. David</span>
+                                        </div>
+                                        <div class="py-3 grid grid-cols-3 gap-4">
+                                            <span class="text-sm font-medium text-gray-500">Holder Address</span>
+                                            <span class="text-sm font-semibold text-gray-900 col-span-2">No. 15, Tudun Wada Street, Jos North, Plateau State</span>
+                                        </div>
+                                        <div class="py-3 grid grid-cols-3 gap-4">
+                                            <span class="text-sm font-medium text-gray-500">Nationality</span>
+                                            <span class="text-sm font-semibold text-gray-900 col-span-2">Nigerian</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TDP/Survey Panel -->
+                        <div id="tab-content-tdp" class="tab-panel hidden w-full bg-white rounded-lg">
+                            <p class="text-sm text-gray-600 mb-4">Simulated Survey Plan (PLAGIS/SUR/2021/4592)</p>
+                            <div class="w-full bg-gray-50 rounded-lg p-4 border border-gray-200 overflow-hidden">
+                                <svg viewBox="0 0 400 300" class="w-full h-auto">
+                                    <!-- North Arrow -->
+                                    <defs>
+                                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+                                        </marker>
+                                    </defs>
+                                    <line x1="360" y1="50" x2="360" y2="100" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" />
+                                    <text x="360" y="40" font-family="Inter, sans-serif" font-size="12" font-weight="bold" text-anchor="middle">N</text>
+                                    
+                                    <!-- Plot Shape -->
+                                    <polygon points="50,50 300,50 320,250 50,230" class="svg-plot-line" fill="rgba(4,120,87,0.05)" stroke="#047857" stroke-width="3" />
+                                    
+                                    <!-- Dimensions -->
+                                    <text x="175" y="40" class="svg-text" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">25.00m</text>
+                                    <text x="320" y="150" class="svg-text" font-family="Inter, sans-serif" font-size="12" text-anchor="start" transform="rotate(90, 320, 150)">42.15m</text>
+                                    <text x="185" y="260" class="svg-text" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">27.50m</text>
+                                    <text x="40" y="140" class="svg-text" font-family="Inter, sans-serif" font-size="12" text-anchor="end" transform="rotate(-90, 40, 140)">40.00m</text>
+                                    
+                                    <!-- Beacons -->
+                                    <circle class="svg-beacon" cx="50" cy="50" r="4" data-beacon="BCN123A" />
+                                    <circle class="svg-beacon" cx="300" cy="50" r="4" data-beacon="BCN123B" />
+                                    <circle class="svg-beacon" cx="320" cy="250" r="4" data-beacon="BCN123C" />
+                                    <circle class="svg-beacon" cx="50" cy="230" r="4" data-beacon="BCN123D" />
+
+                                    <text x="185" y="150" class="svg-text" font-family="Inter, sans-serif" font-size="14" font-weight="bold" fill="#047857" text-anchor="middle">PLOT 72</text>
+                                    <text x="185" y="170" class="svg-text" font-family="Inter, sans-serif" font-size="12" fill="#333" text-anchor="middle">1,250.75 sqm</text>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Location (GIS) Panel -->
+                        <div id="tab-content-location" class="tab-panel hidden w-full bg-white rounded-lg">
+                            <p class="text-sm text-gray-600 mb-2">Live GIS Location View</p>
+                            <div class="w-full h-96 rounded-lg overflow-hidden border border-gray-200">
+                                <iframe
+                                    width="100%"
+                                    height="100%"
+                                    style="border:0"
+                                    loading="lazy"
+                                    allowfullscreen
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    src="https://maps.google.com/maps?q=9.8521,8.9015&hl=en&z=16&amp;output=embed">
+                                </iframe>
+                            </div>
+                            <div class="mt-4 bg-gray-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-800">Plot Coordinates</h4>
+                                <p class="text-gray-600">Latitude: <span class="font-medium text-gray-900">9.8521° N</span></p>
+                                <p class="text-gray-600">Longitude: <span class="font-medium text-gray-900">8.9015° E</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Terms & Conditions Panel -->
+                        <div id="tab-content-terms" class="tab-panel hidden w-full bg-white rounded-lg">
+                            <div class="w-full h-[500px] overflow-y-auto p-4 bg-gray-50 rounded-lg border border-gray-200 text-sm text-gray-700 space-y-4">
+                                
+                                <h3 class="text-lg font-bold text-gray-900">TERMS AND CONDITIONS OF THE STATUTORY RIGHT OF OCCUPANCY</h3>
+                                
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">1. DEVELOPMENT OBLIGATION</h4>
+                                    <p>The Holder shall, within two (2) years (or any period prescribed by Government) from the commencement of this Right of Occupancy, erect and complete on the said land all buildings and structures approved in the detailed building plans submitted to and approved by the relevant Planning Authority. Failure to develop within the stipulated time shall render the grant liable to revocation.</p>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">2. USE RESTRICTION</h4>
+                                    <p>The land shall be used solely and strictly for the purpose for which this Right of Occupancy is granted (Residential, Commercial, Industrial, Mixed Use, Agricultural, etc.). Any change of purpose must receive prior written consent of the Minister/Governor or the appropriate Authority.</p>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">3. SANITATION & MAINTENANCE</h4>
+                                    <p>The Holder shall maintain the land in a clean, sanitary, and good environmental condition, free of stagnant water, refuse, weeds, bush, rubbish, or any unwholesome matter, and shall comply with all sanitary regulations and orders issued by the Minister, Governor, Commissioner, Local Government Council, or any authorized officer.</p>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">4. ALIENATION (TRANSFER) RESTRICTION</h4>
+                                    <p>The Holder shall not alienate or attempt to alienate this Right of Occupancy or any part thereof by Sale, Assignment, Mortgage, Transfer of possession, Sublease, Bequest, Gift or Power of Attorney without the prior written consent of the Minister/Governor or designated Commissioner. Any alienation without consent renders the grant invalid and revocable and may attract penalties.</p>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">5. ADDITIONS & ALTERATIONS</h4>
+                                    <p>The Holder shall not erect or permit to be erected any additional buildings or make alterations to existing buildings except in accordance with the approved plans and specifications sanctioned by the Development Control Department, Town Planning Authority, or Survey and Lands Office.</p>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">6. BOUNDARY PRESERVATION</h4>
+                                    <p>The Holder shall maintain in good and substantial repair all beacons, survey pillars, pegs, and boundary marks defining the plot. Any disturbance, removal, or alteration of such marks shall constitute a breach of the Right of Occupancy. Encroachment upon adjoining land is strictly prohibited.</p>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">7. INSPECTION ACCESS</h4>
+                                    <p>The Minister/Governor, Commissioner, Surveyor-General, or any authorized officer shall have unrestricted access to the land during reasonable daytime hours for inspection of development, sanitation, encroachment, or compliance. The Holder must allow free access without obstruction.</p>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">8. RENT PAYMENT</h4>
+                                    <p>The Holder shall pay the prescribed annual ground rent in advance, on or before the anniversary of the grant each year, without demand by the Government. Failure to pay rent within the designated period (usually three months) constitutes grounds for revocation.</p>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">9. REVISION OF RENT</h4>
+                                    <p>Ground rent may be revised by Government every five (5) years or such period as may be prescribed. Notice of revision shall be communicated in writing, and the Holder must pay the revised rent within the stipulated time.</p>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">10. PENALTIES AND ARREARS</h4>
+                                    <p>If ground rent or any charges remain unpaid for three (3) months after they become due, whether or not a demand has been issued: The amount shall accrue penalties; The Right of Occupancy becomes liable to revocation; Government may re-enter the land; The Holder forfeits improvements at Government discretion; No mortgage, sublease, or assignment application will be considered until arrears are cleared.</p>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">11. SURVEY FEES, PROCESSING FEES & OTHER CHARGES</h4>
+                                    <p>The Holder shall pay all fees relating to: Survey, Charting, Processing, Registration, Stamping, GIS fees, Renewal fees, Regularization fees, Premium (where applicable). These must be paid in full before issuance or transfer of the Certificate.</p>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">12. PUBLIC INTEREST REVOCATION</h4>
+                                    <p>The grant may be revoked for overriding public interest in accordance with the Land Use Act, including: Non-payment of rent; Breach of any term or condition; Failure to develop as required; Sanitation violations; Security or planning violations; Public utilities or infrastructure development. Compensation shall be made only as applicable under the Land Use Act.</p>
+                                </div>
+
+                                <!-- ... Other terms ... -->
+
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">20. FULL COMPLIANCE REQUIREMENT</h4>
+                                    <p>Any failure to comply with any of these terms renders the Right of Occupancy liable to revocation under the Land Use Act (1978) and applicable State regulations.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+            // IMPORTANT: After injecting the new HTML, attach event listeners to the tabs
+            initializeTabs();
+        };
+
+        // Function to display the final failure screen
+        const showFailureScreen = (ref) => {
+            statusContainer.innerHTML = `
+                <div class="flex flex-col items-center justify-center min-h-[400px] text-center">
+                    <div class="my-4">${failureIcon}</div>
+                    <h2 class="text-3xl font-extrabold text-red-600">VERIFICATION FAILED</h2>
+                    <p class="text-lg text-gray-700 mt-4">
+                        The Certificate of Occupancy with reference <strong class="text-red-700">${ref}</strong> was not found in the official PLAGIS database.
+                    </p>
+                    <p class="text-gray-600 mt-6">
+                        This certificate may be invalid or fraudulent. Please visit the Ministry of Lands, Survey and Town Planning head office at Joseph Gomwalk Secretariat for immediate assistance.
+                    </pre>
+                </div>
+            `;
+        };
+
+        // Function to show the payment modal
+        const showPaymentModal = () => {
+            paymentModal.classList.remove('hidden');
+            setTimeout(() => {
+                paymentModal.classList.add('opacity-100');
+                paymentModalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        };
+
+        // --- Asynchronous Verification Flow ---
+        const startVerificationFlow = async () => {
+            // Get C of O Ref from URL (or use defaults)
+            const params = new URLSearchParams(window.location.search);
+            const isInvalid = params.get('status') === 'invalid';
+            const validRef = 'PLS/JOS/21/A-8842';
+            const invalidRef = 'PLS/JOS/18/X-1337';
+            const currentRef = isInvalid ? invalidRef : validRef;
+
+            try {
+                // Step 1: Connecting
+                updateStatus(spinnerIcon, "Connecting to PLAGIS", "Step 1 of 3: Establishing secure connection...");
+                await delay(2000);
+
+                // Step 2: Verifying C of O
+                updateStatus(databaseIcon, "Querying Database", `Step 2 of 3: Authenticating ref: ${currentRef}`);
+                await delay(3000);
+
+                // Step 3: Check if valid
+                if (isInvalid) {
+                    showFailureScreen(currentRef);
+                    return; // Stop the flow
+                }
+
+                // Step 4: Payment
+                updateStatus(paymentIcon, "Payment Required", "Step 3 of 3: A ₦5,000 verification fee is required.");
+                await delay(1000);
+                showPaymentModal();
+
+                // Payment button logic
+                payButton.onclick = async () => {
+                    // Hide modal
+                    paymentModal.classList.remove('opacity-100');
+                    paymentModalContent.classList.remove('scale-100', 'opacity-100');
+                    await delay(300);
+                    paymentModal.classList.add('hidden');
+
+                    // Step 5: Payment Processing
+                    updateStatus(spinnerIcon, "Processing Payment...", "Please wait, confirming transaction...");
+                    await delay(3500); // Simulate payment gateway
+
+                    // Step 6: Retrieving Records
+                    updateStatus(spinnerIcon, "Payment Successful!", "Retrieving land records...");
+                    await delay(2500);
+                    
+                    // Final Step: Show Success
+                    showSuccessScreen(currentRef);
+                };
+
+            } catch (error) {
+                console.error("Verification Error:", error);
+                showFailureScreen("ERROR");
+            }
+        };
+
+        // Start the process on page load
+        window.onload = startVerificationFlow;
+
+    </script>
+</body>
+</html>
+
+
